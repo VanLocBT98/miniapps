@@ -77,9 +77,12 @@ jobs:
         run: pnpm --filter @repo/main exec playwright install --with-deps chromium
 
       - name: Playwright smoke
-        run: pnpm --filter @repo/main test:e2e -- e2e/smoke.spec.ts
+        # Use `exec` so the file filter is not swallowed as a literal `--` arg
+        # (which makes Playwright run every e2e file and can hide startup issues).
+        run: pnpm --filter @repo/main exec playwright test e2e/smoke.spec.ts
         env:
           CI: true
+          PORT: '3000'
 
       - name: Build changed applications
         if: steps.changed.outputs.has_apps == 'true'

@@ -35,7 +35,11 @@ function workspaceAtAlias(): Plugin {
 
 export default defineConfig({
   server: {
+    // Bind IPv4 explicitly so Playwright/CI probes to 127.0.0.1 succeed
+    // (Node 17+ often resolves `localhost` to ::1 first).
+    host: '127.0.0.1',
     port: 3000,
+    strictPort: true,
   },
   build: {
     // Hidden source maps for observability; avoids Vercel 403 spam on .map in DevTools.
