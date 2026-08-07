@@ -57,7 +57,7 @@ RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate \
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
-COPY --from=build /app/apps/main/dist ./apps/main/dist
+COPY --from=build /app/apps/main/.output ./apps/main/.output
 COPY --from=build /app/apps/main/package.json ./apps/main/package.json
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./package.json
