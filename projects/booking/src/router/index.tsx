@@ -43,7 +43,7 @@ const queryClient = new QueryClient()
 
 const rootRoute = createRootRoute({
   component: () => (
-    <div className="min-h-screen bg-slate-950 p-6 text-slate-100">
+    <div className="min-h-screen bg-slate-950/80 p-6 text-slate-100">
       <header className="mb-6 flex flex-wrap items-center gap-4 border-b border-slate-800 pb-4">
         <strong>{project.name} (standalone)</strong>
         {project.navigation.map((item) => (

@@ -137,3 +137,5 @@ export function getNavigationForUser(
     )
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
 }
+
+export { toStandaloneHref } from './standalone-path'

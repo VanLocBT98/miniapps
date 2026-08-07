@@ -4,6 +4,7 @@ import {
   createRoute,
   createRouter,
   Link,
+  redirect,
   RouterProvider,
 } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -15,11 +16,15 @@ import PermissionsPage from '../pages/PermissionsPage'
 
 const rootRoute = createRootRoute({
   component: () => (
-    <div className="min-h-screen bg-slate-950 p-6 text-slate-100">
+    <div className="min-h-screen bg-slate-950/80 p-6 text-slate-100">
       <header className="mb-6 flex flex-wrap items-center gap-4 border-b border-slate-800 pb-4">
         <strong>{project.name} (standalone)</strong>
         {project.navigation.map((item) => (
-          <Link key={item.id} to={item.path} className="text-sm text-sky-400 hover:underline">
+          <Link
+            key={item.id}
+            to={item.path}
+            className="text-sm text-sky-400 hover:underline"
+          >
             {item.label}
           </Link>
         ))}
@@ -31,25 +36,38 @@ const rootRoute = createRootRoute({
   ),
 })
 
+const indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  beforeLoad: () => {
+    throw redirect({ to: '/admin/users' })
+  },
+})
+
 const usersRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/users',
+  path: '/admin/users',
   component: UsersPage,
 })
 
 const rolesRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/roles',
+  path: '/admin/roles',
   component: RolesPage,
 })
 
 const permissionsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/permissions',
+  path: '/admin/permissions',
   component: PermissionsPage,
 })
 
-const routeTree = rootRoute.addChildren([usersRoute, rolesRoute, permissionsRoute])
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  usersRoute,
+  rolesRoute,
+  permissionsRoute,
+])
 
 const queryClient = new QueryClient()
 
