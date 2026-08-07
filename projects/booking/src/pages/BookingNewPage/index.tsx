@@ -37,7 +37,7 @@ export default function BookingNewPage() {
               {
                 onSuccess: (data) => {
                   void navigate({
-                    to: '/booking/$bookingId/',
+                    to: '/booking/$bookingId',
                     params: { bookingId: data.id },
                   })
                 },

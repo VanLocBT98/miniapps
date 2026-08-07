@@ -1,28 +1,97 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
+    branches: [main, develop, 'release/**', 'hotfix/**']
+  push:
+    branches: [main, develop, 'release/**', 'hotfix/**']
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   quality:
+    name: Lint · Typecheck · Test · Build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          version: 11.20.0
-      - uses: actions/setup-node@v4
+          fetch-depth: 0
+
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/setup-node-pnpm
         with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-      - run: pnpm typecheck
-      - run: pnpm test
-      - run: pnpm --filter @repo/main build
+          turbo-cache-key: ci
+
+      - name: Detect changed applications
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="origin/${{ github.base_ref }}"
+          else
+            BASE="${{ github.event.before }}"
+            if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+              BASE="HEAD~1"
+            fi
+          fi
+          echo "base=$BASE" >> "$GITHUB_OUTPUT"
+          RESULT=$(node scripts/ci/detect-changed-apps.mjs "$BASE")
+          echo "$RESULT" | tee /tmp/changed-apps.json
+          FILTER=$(echo "$RESULT" | jq -r '.turboFilter')
+          echo "turbo_filter=$FILTER" >> "$GITHUB_OUTPUT"
+          echo "has_apps=$(echo "$RESULT" | jq -r '(.apps | length) > 0')" >> "$GITHUB_OUTPUT"
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type check
+        run: >
+          pnpm turbo run typecheck
+          --filter=@repo/dashboard
+          --filter=@repo/admin
+          --filter=@repo/booking
+          --filter=@repo/shared
+          --filter=@repo/config
+          --filter=@repo/ui
+          --filter=@repo/db
+
+      - name: Unit tests
+        run: >
+          pnpm turbo run test
+          --filter=@repo/main
+          --filter=@repo/dashboard
+          --filter=@repo/admin
+          --filter=@repo/booking
+          --filter=@repo/shared
+          --filter=@repo/config
+          --filter=@repo/ui
+          --filter=@repo/db
+
+      - name: Coverage report + threshold
+        run: pnpm test:coverage
+
+      - name: Install Playwright browsers
+        run: pnpm --filter @repo/main exec playwright install --with-deps chromium
+
+      - name: Playwright smoke
+        run: pnpm --filter @repo/main test:e2e -- e2e/smoke.spec.ts
+        env:
+          CI: true
+
+      - name: Build changed applications
+        if: steps.changed.outputs.has_apps == 'true'
+        run: pnpm turbo run build ${{ steps.changed.outputs.turbo_filter }}
+
+      - name: Upload build artifacts
+        if: steps.changed.outputs.has_apps == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ github.sha }}
+          path: |
+            apps/*/dist
+            projects/*/dist
+          if-no-files-found: warn
+          retention-days: 7

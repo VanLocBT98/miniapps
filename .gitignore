@@ -22,3 +22,6 @@ apps/main/src/routeTree.gen.ts
 .req/
 
 .pnpm-store/
+.vercel
+**/.vercel
+audit-report.txt

@@ -1,0 +1,77 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g. 1.2.0)'
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-node-pnpm
+        with:
+          turbo-cache-key: release
+
+      - name: Resolve version
+        id: ver
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Quality gate
+        run: |
+          pnpm turbo run lint typecheck test
+          pnpm turbo run build \
+            --filter=@repo/main \
+            --filter=@repo/dashboard \
+            --filter=@repo/admin \
+            --filter=@repo/booking
+
+      - name: Generate changelog notes
+        id: notes
+        run: |
+          {
+            echo "## MiniApps Platform v${{ steps.ver.outputs.version }}"
+            echo ""
+            echo "Independent Vercel projects:"
+            echo "- Main (\`@repo/main\`)"
+            echo "- Project A / Dashboard (\`@repo/dashboard\`)"
+            echo "- Project B / Admin (\`@repo/admin\`)"
+            echo "- Project C / Booking (\`@repo/booking\`)"
+            echo ""
+            echo "API: configure \`VITE_API_URL\` → api-mini-apps (see Environment.md)."
+            echo ""
+            echo "### Commits"
+            git log -20 --pretty=format:'- %s (%h)' || true
+          } > RELEASE_NOTES.md
+          cat RELEASE_NOTES.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.ver.outputs.tag }}
+          name: Release ${{ steps.ver.outputs.tag }}
+          body_path: RELEASE_NOTES.md
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

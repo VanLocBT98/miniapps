@@ -1,11 +1,9 @@
 import { z } from 'zod'
 
-const booleanFromString = z
-  .union([z.boolean(), z.string()])
-  .transform((value) => {
-    if (typeof value === 'boolean') return value
-    return value === 'true' || value === '1'
-  })
+const booleanFromString = z.union([z.boolean(), z.string()]).transform((value) => {
+  if (typeof value === 'boolean') return value
+  return value === 'true' || value === '1'
+})
 
 export const serverEnvSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -20,13 +18,18 @@ export const serverEnvSchema = z.object({
 export const publicEnvSchema = z.object({
   VITE_APP_NAME: z.string().default('MiniApps Platform'),
   VITE_APP_URL: z.string().default('http://localhost:3000'),
-  VITE_API_URL: z.string().default('/api'),
+  /** Backend `api-mini-apps` base URL — never hardcode in app code. */
+  VITE_API_URL: z.string().default('http://localhost:3001'),
+  /** development | staging | production — used when resolving defaults. */
+  VITE_APP_ENV: z.enum(['development', 'staging', 'production']).optional(),
   VITE_ENABLE_DEVTOOLS: booleanFromString.default(true),
   /** Portal origin (Main App). */
   VITE_PORTAL_HOST: z.string().optional(),
   VITE_PROJECT_DASHBOARD_HOST: z.string().optional(),
   VITE_PROJECT_ADMIN_HOST: z.string().optional(),
   VITE_PROJECT_BOOKING_HOST: z.string().optional(),
+  /** Optional Sentry DSN — observability bootstrap only. */
+  VITE_SENTRY_DSN: z.string().optional(),
 })
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>
@@ -50,10 +53,12 @@ export function getPublicEnv(env: Record<string, string | undefined> = {}): Publ
     VITE_APP_NAME: env.VITE_APP_NAME,
     VITE_APP_URL: env.VITE_APP_URL,
     VITE_API_URL: env.VITE_API_URL,
+    VITE_APP_ENV: env.VITE_APP_ENV || undefined,
     VITE_ENABLE_DEVTOOLS: env.VITE_ENABLE_DEVTOOLS,
     VITE_PORTAL_HOST: env.VITE_PORTAL_HOST || undefined,
     VITE_PROJECT_DASHBOARD_HOST: env.VITE_PROJECT_DASHBOARD_HOST || undefined,
     VITE_PROJECT_ADMIN_HOST: env.VITE_PROJECT_ADMIN_HOST || undefined,
     VITE_PROJECT_BOOKING_HOST: env.VITE_PROJECT_BOOKING_HOST || undefined,
+    VITE_SENTRY_DSN: env.VITE_SENTRY_DSN || undefined,
   })
 }

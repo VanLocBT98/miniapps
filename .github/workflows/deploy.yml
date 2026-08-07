@@ -1,0 +1,144 @@
+name: Production Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'Deploy only one app (main|project-a|project-b|project-c|all)'
+        required: false
+        default: all
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+# Production only from main (or manual). Never from feature/*.
+permissions:
+  contents: read
+
+jobs:
+  detect:
+    name: Detect changed apps
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+      has_apps: ${{ steps.set.outputs.has_apps }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-node-pnpm
+        with:
+          turbo-cache-key: deploy-detect
+      - id: set
+        run: |
+          BASE="${{ github.event.before }}"
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+            BASE="HEAD~1"
+          fi
+          RESULT=$(node scripts/ci/detect-changed-apps.mjs "$BASE")
+          APP_INPUT="${{ github.event.inputs.app || 'all' }}"
+          if [ "$APP_INPUT" != "all" ] && [ -n "$APP_INPUT" ]; then
+            APPS=$(echo "$RESULT" | jq -c --arg id "$APP_INPUT" '[.apps[] | select(.id == $id)]')
+            if [ "$(echo "$APPS" | jq 'length')" = "0" ]; then
+              # Force selected app even if path filter missed (manual deploy)
+              APPS=$(node -e "
+                import('./scripts/ci/apps.mjs').then(m => {
+                  const a = m.DEPLOY_APPS.find(x => x.id === process.argv[1]);
+                  console.log(JSON.stringify(a ? [a] : []));
+                })
+              " "$APP_INPUT")
+            fi
+          else
+            APPS=$(echo "$RESULT" | jq -c '.apps')
+          fi
+          echo "matrix=$APPS" >> "$GITHUB_OUTPUT"
+          echo "has_apps=$(echo "$APPS" | jq -r 'length > 0')" >> "$GITHUB_OUTPUT"
+          echo "$APPS" | jq .
+
+  deploy:
+    name: Deploy · ${{ matrix.label }}
+    needs: detect
+    if: needs.detect.outputs.has_apps == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.detect.outputs.matrix) }}
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-node-pnpm
+        with:
+          turbo-cache-key: deploy-${{ matrix.id }}
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Resolve Vercel project id
+        id: vercel
+        env:
+          VERCEL_PROJECT_MAIN: ${{ secrets.VERCEL_PROJECT_MAIN }}
+          VERCEL_PROJECT_PROJECT_A: ${{ secrets.VERCEL_PROJECT_PROJECT_A }}
+          VERCEL_PROJECT_PROJECT_B: ${{ secrets.VERCEL_PROJECT_PROJECT_B }}
+          VERCEL_PROJECT_PROJECT_C: ${{ secrets.VERCEL_PROJECT_PROJECT_C }}
+        run: |
+          SECRET_NAME="${{ matrix.projectIdSecret }}"
+          PROJECT_ID="${!SECRET_NAME}"
+          if [ -z "$PROJECT_ID" ]; then
+            echo "::error::Missing GitHub secret $SECRET_NAME"
+            exit 1
+          fi
+          echo "project_id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve API URL
+        id: api
+        run: |
+          URL="${{ vars.VITE_API_URL_PRODUCTION }}"
+          if [ -z "$URL" ]; then
+            URL="https://api-mini-apps.vercel.app"
+          fi
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Pull Vercel production environment
+        working-directory: ${{ matrix.rootDirectory }}
+        run: |
+          vercel pull --yes --environment=production \
+            --token="${{ secrets.VERCEL_TOKEN }}"
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ steps.vercel.outputs.project_id }}
+
+      - name: Build production
+        working-directory: ${{ matrix.rootDirectory }}
+        run: vercel build --prod --token="${{ secrets.VERCEL_TOKEN }}"
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ steps.vercel.outputs.project_id }}
+          VITE_API_URL: ${{ steps.api.outputs.url }}
+          VITE_APP_ENV: production
+
+      - name: Deploy prebuilt
+        id: deploy
+        working-directory: ${{ matrix.rootDirectory }}
+        run: |
+          URL=$(vercel deploy --prebuilt --prod --token="${{ secrets.VERCEL_TOKEN }}")
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Deployed: $URL"
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ steps.vercel.outputs.project_id }}
+
+      - name: Promote to production alias
+        working-directory: ${{ matrix.rootDirectory }}
+        run: |
+          vercel promote "${{ steps.deploy.outputs.url }}" --yes \
+            --token="${{ secrets.VERCEL_TOKEN }}" || \
+            echo "Promote skipped or already current (see Deployment.md)."
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ steps.vercel.outputs.project_id }}

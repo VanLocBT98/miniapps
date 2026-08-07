@@ -180,7 +180,9 @@ const historyRoute = createRoute({
     Promise.all([
       queryClient.ensureQueryData(bookingDetailQueryOptions(params.bookingId)),
       queryClient.ensureQueryData(bookingHistoryQueryOptions(params.bookingId)),
-      queryClient.ensureQueryData(bookingTimelineQueryOptions(params.bookingId)),
+      queryClient.ensureQueryData(
+        bookingTimelineQueryOptions(params.bookingId),
+      ),
     ]),
   component: function HistoryRoute() {
     const { bookingId } = detailLayoutRoute.useParams()
@@ -238,26 +240,33 @@ const customerRouteTree = customerDetailLayoutRoute.addChildren([
   customerEditRoute,
 ])
 
-const children = [
-  indexRoute,
-  listRoute,
-  newRoute,
-  detailRouteTree,
-  customerListRoute,
-  customerNewRoute,
-  customerRouteTree,
-]
+const calendarRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/booking/calendar',
+  loader: () => queryClient.ensureQueryData(bookingsQueryOptions),
+  component: CalendarPage,
+})
 
-if (ENABLE_LEGACY_CALENDAR) {
-  children.push(
-    createRoute({
-      getParentRoute: () => rootRoute,
-      path: '/booking/calendar',
-      loader: () => queryClient.ensureQueryData(bookingsQueryOptions),
-      component: CalendarPage,
-    }),
-  )
-}
+const children = ENABLE_LEGACY_CALENDAR
+  ? [
+      indexRoute,
+      listRoute,
+      newRoute,
+      detailRouteTree,
+      customerListRoute,
+      customerNewRoute,
+      customerRouteTree,
+      calendarRoute,
+    ]
+  : [
+      indexRoute,
+      listRoute,
+      newRoute,
+      detailRouteTree,
+      customerListRoute,
+      customerNewRoute,
+      customerRouteTree,
+    ]
 
 const routeTree = rootRoute.addChildren(children)
 

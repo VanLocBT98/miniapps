@@ -4,16 +4,6 @@ import { z } from 'zod'
 export const permissionSchema = z.string().min(1)
 export type Permission = z.infer<typeof permissionSchema>
 
-export const navigationItemSchema = z.object({
-  id: z.string(),
-  label: z.string(),
-  path: z.string(),
-  icon: z.string().optional(),
-  order: z.number().default(0),
-  permissions: z.array(permissionSchema).default([]),
-  children: z.array(z.lazy(() => navigationItemSchema)).optional(),
-})
-
 export type NavigationItem = {
   id: string
   label: string
@@ -23,6 +13,18 @@ export type NavigationItem = {
   permissions?: Permission[]
   children?: NavigationItem[]
 }
+
+export const navigationItemSchema: z.ZodType<NavigationItem> = z.lazy(() =>
+  z.object({
+    id: z.string(),
+    label: z.string(),
+    path: z.string(),
+    icon: z.string().optional(),
+    order: z.number().default(0),
+    permissions: z.array(permissionSchema).default([]),
+    children: z.array(navigationItemSchema).optional(),
+  }),
+)
 
 export type ProjectLayoutProps = {
   children: ReactNode
@@ -74,9 +76,7 @@ export type CreateProjectInput = {
 const registry = new Map<string, MiniProjectDefinition>()
 
 export function createProject(input: CreateProjectInput): MiniProjectDefinition {
-  const basePath = input.basePath.startsWith('/')
-    ? input.basePath
-    : `/${input.basePath}`
+  const basePath = input.basePath.startsWith('/') ? input.basePath : `/${input.basePath}`
 
   const project: MiniProjectDefinition = {
     id: input.id,

@@ -1,0 +1,12 @@
+title = "miniapps"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Local demo env templates (no production secrets)"
+paths = [
+  '''apps/main/\.env\.development''',
+  '''apps/main/\.env\.production''',
+  '''\.trufflehog-exclude''',
+]

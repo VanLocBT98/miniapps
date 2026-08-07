@@ -5,7 +5,10 @@ import {
   customerTypeSchema,
   genderSchema,
 } from '@/shared/types'
-import type { CustomerFormErrors, CustomerFormValues } from './customer-form-model'
+import type {
+  CustomerFormErrors,
+  CustomerFormValues,
+} from '../customer-form-model'
 
 function SelectField({
   label,
@@ -175,7 +178,10 @@ export function CustomerForm({
         </div>
       </Card>
 
-      <Card title="Contact Information" description="Phone and email are optional.">
+      <Card
+        title="Contact Information"
+        description="Phone and email are optional."
+      >
         <div className="grid gap-3 sm:grid-cols-2">
           <Input
             label="Phone Number"
@@ -271,7 +277,12 @@ export function CustomerForm({
           {pending ? 'Saving…' : submitLabel}
         </Button>
         {onCancel ? (
-          <Button type="button" variant="ghost" onClick={onCancel} disabled={pending}>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onCancel}
+            disabled={pending}
+          >
             Cancel
           </Button>
         ) : null}

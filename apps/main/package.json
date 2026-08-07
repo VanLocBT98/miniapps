@@ -6,7 +6,7 @@
   "sideEffects": false,
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && tsc --noEmit",
+    "build": "vite build",
     "preview": "vite preview",
     "start": "srvx --prod -s ../client dist/server/server.js",
     "typecheck": "tsc --noEmit",

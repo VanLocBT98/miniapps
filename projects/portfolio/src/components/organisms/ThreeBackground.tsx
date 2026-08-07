@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState, type ComponentType } from 'react'
+import { Suspense, lazy, useSyncExternalStore, type ComponentType } from 'react'
 import type { ThreeConfig } from '@/shared/types/portfolio'
 
 type SceneProps = {
@@ -9,22 +9,33 @@ const ThreeScene = lazy(() =>
   import('./ThreeScene').then((mod) => ({ default: mod.ThreeScene })),
 )
 
+function useIsClient() {
+  return useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false,
+  )
+}
+
+function usePrefersReducedMotion() {
+  return useSyncExternalStore(
+    (onStoreChange) => {
+      const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+      media.addEventListener('change', onStoreChange)
+      return () => media.removeEventListener('change', onStoreChange)
+    },
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    () => false,
+  )
+}
+
 /**
  * Client-only Three.js background with a readability veil
  * so bright gradient does not wash out typography.
  */
 export function ThreeBackground({ config }: { config: ThreeConfig }) {
-  const [ready, setReady] = useState(false)
-  const [reducedMotion, setReducedMotion] = useState(false)
-
-  useEffect(() => {
-    setReady(true)
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducedMotion(media.matches)
-    const onChange = () => setReducedMotion(media.matches)
-    media.addEventListener('change', onChange)
-    return () => media.removeEventListener('change', onChange)
-  }, [])
+  const ready = useIsClient()
+  const reducedMotion = usePrefersReducedMotion()
 
   if (!config.enabled) return null
 

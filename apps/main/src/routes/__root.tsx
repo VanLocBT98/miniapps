@@ -15,6 +15,9 @@ import { ensureProjectsRegistered, getInstalledProjectMeta } from '~/projects/in
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary'
 import { NotFound } from '~/components/NotFound'
 import appCss from '~/styles/app.css?url'
+import { bootstrapObservability } from '~/lib/observability'
+
+bootstrapObservability()
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   beforeLoad: async () => {

@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig, type Plugin } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
@@ -17,9 +18,7 @@ function workspaceAtAlias(): Plugin {
       if (!id.startsWith('@/') || !importer) return
       const normalized = importer.replace(/\\/g, '/')
       const fromProjects = normalized.match(/\/projects\/([^/]+)\//)
-      const fromPkg =
-        fromProjects ??
-        normalized.match(/\/node_modules\/@repo\/([^/]+)\//)
+      const fromPkg = fromProjects ?? normalized.match(/\/node_modules\/@repo\/([^/]+)\//)
       if (!fromPkg) return
       const candidate = path.resolve(
         repoRoot,
@@ -37,20 +36,20 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  build: {
+    sourcemap: true,
+  },
+  test: {
+    exclude: ['**/e2e/**', '**/node_modules/**', '**/dist/**'],
+  },
   resolve: {
     tsconfigPaths: true,
     alias: {
       '~': path.resolve(rootDir, './src'),
       // Explicit paths so Vite SSR module runner resolves workspace @repo/db
       // (bare imports from projects/booking server fns otherwise fail).
-      '@repo/db/customers': path.resolve(
-        repoRoot,
-        'packages/db/src/customers/index.ts',
-      ),
-      '@repo/db/schema': path.resolve(
-        repoRoot,
-        'packages/db/src/schema/index.ts',
-      ),
+      '@repo/db/customers': path.resolve(repoRoot, 'packages/db/src/customers/index.ts'),
+      '@repo/db/schema': path.resolve(repoRoot, 'packages/db/src/schema/index.ts'),
       '@repo/db': path.resolve(repoRoot, 'packages/db/src/index.ts'),
     },
   },

@@ -5,8 +5,12 @@ export const PROJECT_NAME = 'Booking' as const
 export const ENABLE_LEGACY_CALENDAR = false
 
 export const bookingDetailTabs = [
-  { id: 'overview', label: 'Overview', to: '/booking/$bookingId/' },
-  { id: 'passengers', label: 'Passengers', to: '/booking/$bookingId/passengers' },
+  { id: 'overview', label: 'Overview', to: '/booking/$bookingId' },
+  {
+    id: 'passengers',
+    label: 'Passengers',
+    to: '/booking/$bookingId/passengers',
+  },
   { id: 'flights', label: 'Flights', to: '/booking/$bookingId/flights' },
   { id: 'payment', label: 'Payment', to: '/booking/$bookingId/payment' },
   { id: 'documents', label: 'Documents', to: '/booking/$bookingId/documents' },

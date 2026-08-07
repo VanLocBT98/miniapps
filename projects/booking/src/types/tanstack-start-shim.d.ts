@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Ambient fallback when the IDE cannot resolve package "exports".
  * Runtime still uses the real `@tanstack/react-start` dependency.
@@ -5,9 +6,9 @@
 declare module '@tanstack/react-start' {
   type Method = 'GET' | 'POST'
 
-  type ServerFnCallable<TData = any, TResult = any> = (
-    opts?: { data?: TData },
-  ) => Promise<TResult>
+  type ServerFnCallable<TData = any, TResult = any> = (opts?: {
+    data?: TData
+  }) => Promise<TResult>
 
   type ServerFnBuilder<TData = any> = {
     validator: (schema: unknown) => ServerFnBuilder<TData>

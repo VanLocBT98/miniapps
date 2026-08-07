@@ -1,0 +1,9 @@
+pnpm-lock.yaml
+**/package-lock.json
+**/*.lock
+**/dist/**
+**/.turbo/**
+**/coverage/**
+**/*.map
+apps/main/.env.development
+apps/main/.env.production

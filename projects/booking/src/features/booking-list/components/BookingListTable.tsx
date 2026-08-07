@@ -24,7 +24,7 @@ function DetailLink({
   return (
     <Link
       className={className ?? 'font-medium text-sky-400 hover:underline'}
-      to="/booking/$bookingId/"
+      to="/booking/$bookingId"
       params={{ bookingId }}
       onClick={(e) => e.stopPropagation()}
     >
@@ -87,7 +87,7 @@ export function BookingListTable({ rows }: { rows: BookingListItem[] }) {
             className="flex flex-wrap gap-1"
             onClick={(e) => e.stopPropagation()}
           >
-            <Link to="/booking/$bookingId/" params={{ bookingId: id }}>
+            <Link to="/booking/$bookingId" params={{ bookingId: id }}>
               <Button type="button" size="sm" variant="ghost">
                 View
               </Button>
@@ -129,7 +129,7 @@ export function BookingListTable({ rows }: { rows: BookingListItem[] }) {
           id: row.id,
           onClick: () => {
             void navigate({
-              to: '/booking/$bookingId/',
+              to: '/booking/$bookingId',
               params: { bookingId: row.original.id },
             })
           },

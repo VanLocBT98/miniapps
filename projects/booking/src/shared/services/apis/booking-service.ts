@@ -25,10 +25,7 @@ import {
   type Document,
 } from '@/shared/types'
 import { bookingDb } from './mock-db'
-import {
-  toBookingListItem,
-  type BookingListItem,
-} from '../mappers'
+import { toBookingListItem, type BookingListItem } from '../mappers'
 
 export type { BookingListItem }
 export type BookingListFilters = {
@@ -80,7 +77,11 @@ function findIndex(id: string) {
   return bookingDb.rows.findIndex((b) => b.id === id)
 }
 
-function pushHistory(booking: BookingAggregate, action: string, user = 'agent') {
+function pushHistory(
+  booking: BookingAggregate,
+  action: string,
+  user = 'agent',
+) {
   const entry = createHistoryEntry({
     id: `h-${booking.id}-${booking.history.length + 1}`,
     action,
@@ -128,7 +129,10 @@ export async function getBooking(
   await delay()
   const booking = bookingDb.rows.find((b) => b.id === id)
   if (!booking) {
-    return failEnvelope({ code: 'booking.not_found', message: 'Booking not found' })
+    return failEnvelope({
+      code: 'booking.not_found',
+      message: 'Booking not found',
+    })
   }
   return okEnvelope(booking)
 }
@@ -191,7 +195,10 @@ export async function updateBooking(
   await delay()
   const idx = findIndex(id)
   if (idx < 0) {
-    return failEnvelope({ code: 'booking.not_found', message: 'Booking not found' })
+    return failEnvelope({
+      code: 'booking.not_found',
+      message: 'Booking not found',
+    })
   }
   const current = bookingDb.rows[idx]!
   if (isBookingReadOnly(current.status)) {
@@ -261,7 +268,10 @@ export async function deleteBooking(
   await delay()
   const idx = findIndex(id)
   if (idx < 0) {
-    return failEnvelope({ code: 'booking.not_found', message: 'Booking not found' })
+    return failEnvelope({
+      code: 'booking.not_found',
+      message: 'Booking not found',
+    })
   }
   const current = bookingDb.rows[idx]!
   if (isBookingReadOnly(current.status)) {
@@ -278,7 +288,8 @@ export async function getBookingHistory(
   id: string,
 ): Promise<ApiEnvelope<HistoryEntry[]>> {
   const res = await getBooking(id)
-  if (!res.success || !res.data) return res as ApiEnvelope<HistoryEntry[]>
+  if (!res.success || !res.data)
+    return res as unknown as ApiEnvelope<HistoryEntry[]>
   return okEnvelope(res.data.history, { bookingId: id })
 }
 
@@ -286,7 +297,8 @@ export async function getBookingTimeline(
   id: string,
 ): Promise<ApiEnvelope<TimelineEvent[]>> {
   const res = await getBooking(id)
-  if (!res.success || !res.data) return res as ApiEnvelope<TimelineEvent[]>
+  if (!res.success || !res.data)
+    return res as unknown as ApiEnvelope<TimelineEvent[]>
   return okEnvelope(res.data.timeline, { bookingId: id })
 }
 
@@ -294,7 +306,8 @@ export async function getBookingPassengers(
   id: string,
 ): Promise<ApiEnvelope<Passenger[]>> {
   const res = await getBooking(id)
-  if (!res.success || !res.data) return res as ApiEnvelope<Passenger[]>
+  if (!res.success || !res.data)
+    return res as unknown as ApiEnvelope<Passenger[]>
   return okEnvelope(res.data.passengers, { bookingId: id })
 }
 
@@ -302,7 +315,7 @@ export async function getBookingFlights(
   id: string,
 ): Promise<ApiEnvelope<Flight[]>> {
   const res = await getBooking(id)
-  if (!res.success || !res.data) return res as ApiEnvelope<Flight[]>
+  if (!res.success || !res.data) return res as unknown as ApiEnvelope<Flight[]>
   return okEnvelope(res.data.flights, { bookingId: id })
 }
 
@@ -310,7 +323,8 @@ export async function getBookingPayment(
   id: string,
 ): Promise<ApiEnvelope<Payment | null>> {
   const res = await getBooking(id)
-  if (!res.success || !res.data) return res as ApiEnvelope<Payment | null>
+  if (!res.success || !res.data)
+    return res as unknown as ApiEnvelope<Payment | null>
   return okEnvelope(res.data.payment, { bookingId: id })
 }
 
@@ -318,6 +332,7 @@ export async function getBookingDocuments(
   id: string,
 ): Promise<ApiEnvelope<Document[]>> {
   const res = await getBooking(id)
-  if (!res.success || !res.data) return res as ApiEnvelope<Document[]>
+  if (!res.success || !res.data)
+    return res as unknown as ApiEnvelope<Document[]>
   return okEnvelope(res.data.documents, { bookingId: id })
 }
