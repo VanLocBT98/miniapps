@@ -1,0 +1,50 @@
+{
+  "name": "miniapps-platform",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.20.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @repo/main dev",
+    "dev:dashboard": "pnpm --filter @repo/dashboard dev",
+    "dev:admin": "pnpm --filter @repo/admin dev",
+    "dev:booking": "pnpm --filter @repo/booking dev",
+    "dev:portfolio": "pnpm --filter @repo/portfolio dev",
+    "build": "pnpm -r --filter @repo/main... build",
+    "start": "pnpm --filter @repo/main start",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "test:e2e": "pnpm --filter @repo/main test:e2e",
+    "db:up": "node scripts/db-up.mjs",
+    "db:down": "docker stop miniapps-postgres >/dev/null 2>&1; docker rm miniapps-postgres >/dev/null 2>&1; docker compose down 2>/dev/null || true",
+    "db:migrate": "DATABASE_URL=${DATABASE_URL:-postgresql://miniapps:miniapps@localhost:5433/miniapps} pnpm --filter @repo/db db:migrate",
+    "db:push": "DATABASE_URL=${DATABASE_URL:-postgresql://miniapps:miniapps@localhost:5433/miniapps} pnpm --filter @repo/db db:push",
+    "db:seed": "DATABASE_URL=${DATABASE_URL:-postgresql://miniapps:miniapps@localhost:5433/miniapps} pnpm --filter @repo/db db:seed",
+    "db:setup": "pnpm db:up && pnpm db:push && pnpm db:seed",
+    "req:next": "node scripts/req-action.mjs next",
+    "req:status": "node scripts/req-action.mjs status",
+    "req:start": "node scripts/req-action.mjs start",
+    "req:stop": "node scripts/req-action.mjs stop",
+    "req:done": "node scripts/req-action.mjs done",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.3.0",
+    "prettier": "^3.9.6",
+    "typescript": "^5.9.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml,css}": [
+      "prettier --write"
+    ]
+  }
+}

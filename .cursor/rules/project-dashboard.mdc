@@ -1,0 +1,10 @@
+---
+description: Dashboard mini-app — follow docs/projects/dashboard requirements
+globs: projects/dashboard/**/*,apps/main/src/routes/_app/dashboard*.tsx,docs/projects/dashboard/**/*
+alwaysApply: false
+---
+
+# Dashboard (`@repo/dashboard`)
+
+Read `docs/projects/dashboard/REQUIREMENTS.md` before changes.
+Append `docs/projects/dashboard/CHANGELOG.md` after meaningful work.

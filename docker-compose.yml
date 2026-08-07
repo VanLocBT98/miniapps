@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: miniapps-postgres
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: miniapps
+      POSTGRES_PASSWORD: miniapps
+      POSTGRES_DB: miniapps
+    volumes:
+      - miniapps_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U miniapps -d miniapps']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  miniapps_pg_data:

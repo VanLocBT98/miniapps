@@ -1,0 +1,24 @@
+node_modules
+dist
+.turbo
+.cache
+coverage
+playwright-report
+test-results
+*.local
+.env
+.env.local
+.env.*.local
+.DS_Store
+*.log
+.vite
+routeTree.gen.ts
+apps/main/src/routeTree.gen.ts
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# Cursor req-run state
+.req/
+
+.pnpm-store/

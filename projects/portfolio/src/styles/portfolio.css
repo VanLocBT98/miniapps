@@ -1,0 +1,52 @@
+/* Portfolio typography + primary accent */
+.portfolio-root {
+  --pf-primary: #a5b4fc;
+  --pf-primary-soft: #c7d2fe;
+  color: #fff;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+.portfolio-root ::selection {
+  background: color-mix(in oklab, var(--pf-primary) 45%, transparent);
+  color: #fff;
+}
+
+/* Weight scale — all white unless .text-primary */
+.portfolio-root .pf-text {
+  color: #fff;
+  font-weight: 400;
+}
+
+.portfolio-root .pf-text-medium {
+  color: #fff;
+  font-weight: 500;
+}
+
+.portfolio-root .pf-text-semibold {
+  color: #fff;
+  font-weight: 600;
+}
+
+.portfolio-root .pf-text-bold {
+  color: #fff;
+  font-weight: 700;
+}
+
+.portfolio-root .pf-text-light {
+  color: rgb(255 255 255 / 0.72);
+  font-weight: 400;
+}
+
+.portfolio-root .pf-text-soft {
+  color: rgb(255 255 255 / 0.58);
+  font-weight: 400;
+}
+
+.portfolio-root .pf-primary {
+  color: var(--pf-primary);
+}
+
+.portfolio-root .pf-primary-soft {
+  color: var(--pf-primary-soft);
+}

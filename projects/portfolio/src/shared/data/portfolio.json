@@ -1,0 +1,282 @@
+{
+  "$schema": "./portfolio.schema.json",
+  "meta": {
+    "id": "portfolio",
+    "version": "1.1.0",
+    "accent": "#a5b4fc",
+    "locale": "en",
+    "siteTitle": "Leo Portfolio",
+    "source": "https://github.com/VanLocBT98 + https://van-loc-portfolio.vercel.app/"
+  },
+  "profile": {
+    "name": "Van Loc",
+    "displayName": "Văn Lộc",
+    "nickname": "Leo",
+    "fullName": "Van Loc (Leo) Nguyen",
+    "headline": "A passionate Frontend Developer from Viet Nam",
+    "greeting": "Hi all, I'm",
+    "welcome": "Welcome Here, I'm a",
+    "roles": ["Frontend Developer", "Software Engineer"],
+    "company": "TripOTA",
+    "location": "District 1, HCM city",
+    "timezone": "UTC+07:00",
+    "githubUsername": "VanLocBT98",
+    "websiteUrl": "https://van-loc-portfolio.vercel.app/",
+    "summary": [
+      "With more than 4 years of experience as a Front-End Developer, I specialize in building dynamic, scalable web applications using React, Next.js, and TypeScript. I am proficient in HTML, CSS, JavaScript, and modern frontend libraries such as Redux.",
+      "I have worked on large-scale projects in airline payment, travel/tour platforms, CRM systems, e-commerce solutions, and outsourcing products. My experience includes building booking flows, payment systems, customer portals, admin dashboards, product catalogs, checkout processes, and internal management tools while ensuring performance, accessibility, and scalability.",
+      "I have strong experience collaborating with backend teams using .NET APIs, SDKs, and cloud services, helping deliver seamless frontend-backend integration. I have also worked with Azure-related systems for task management, deployment pipelines, and infrastructure support.",
+      "Beyond coding, I focus on writing clean, maintainable code, improving UI/UX, optimizing performance, and collaborating effectively with cross-functional and global teams. I stay up to date with modern technologies and always aim to deliver reliable, high-quality products."
+    ],
+    "currentlyLearning": ["React", "NextJS", "Angular"],
+    "resumeUrl": "https://drive.google.com/file/d/15Nze-jM6ol8HnF4ooK0U8_gqxX7FYkEY/view?usp=drive_link",
+    "moreProjectsUrl": "https://github.com/VanLocBT98"
+  },
+  "socials": [
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/nguyen-van-loc-a063a1240/",
+      "icon": "linkedin"
+    },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "url": "https://github.com/VanLocBT98",
+      "icon": "github"
+    },
+    {
+      "id": "facebook",
+      "label": "Facebook",
+      "url": "https://www.facebook.com/dag.phan.1",
+      "icon": "facebook"
+    }
+  ],
+  "nav": [
+    { "id": "home", "label": "Home", "hash": "sec-home" },
+    { "id": "skills", "label": "Skills", "hash": "sec-skills" },
+    { "id": "experiences", "label": "Experiences", "hash": "sec-experiences" },
+    { "id": "projects", "label": "Projects", "hash": "sec-projects" },
+    { "id": "contact", "label": "Contact", "hash": "sec-contact" }
+  ],
+  "techStacks": [
+    {
+      "title": "Languages & frameworks",
+      "keys": [
+        "HTML",
+        "CSS",
+        "Javascript",
+        "Typescript",
+        "ReactJS",
+        "Angular",
+        "NextJS",
+        "GraphQL",
+        "Redux",
+        "Vite"
+      ]
+    },
+    {
+      "title": "UI libraries",
+      "keys": [
+        "Bootstrap 4-5",
+        "React Bootstrap",
+        "Tailwind CSS",
+        "Chakra-UI",
+        "Ant Design",
+        "Ng-Zorro",
+        "Angular Material",
+        "MUI React",
+        "Framer Motion",
+        "GSAP",
+        "Styled-components"
+      ]
+    },
+    {
+      "title": "HeadlessCMS",
+      "keys": ["Hygraph", "Strapi"]
+    },
+    {
+      "title": "Testing tools",
+      "keys": ["Cypress", "Jest", "Postman"]
+    },
+    {
+      "title": "Database",
+      "keys": ["MongoDB", "Firebase"]
+    },
+    {
+      "title": "Other",
+      "keys": [
+        "Git",
+        "Nodejs",
+        "NestJS",
+        "Express",
+        "SEO",
+        "Docker",
+        "Nginx",
+        "Github Actions",
+        "Jenkins",
+        "Monorepos (Turbo)",
+        "Micro-Frontend (Nx)",
+        "Figma",
+        "Adobe Photoshop"
+      ]
+    }
+  ],
+  "experiences": [
+    {
+      "id": "tripota",
+      "companies": ["TripOTA"],
+      "positions": ["Frontend Developer"],
+      "startDate": "05/2024",
+      "endDate": "Present",
+      "responsibilities": [
+        "Built and maintained web platforms in the airline payment and travel/tour domain, including booking systems, payment gateways, customer portals, and internal operation tools.",
+        "Managed project tasks, sprint planning, and delivery workflows with Azure DevOps.",
+        "Developed scalable frontend architecture following Atomic Design principles to improve code reusability, maintainability, and long-term scalability.",
+        "Built responsive interfaces for both customer-facing and admin systems based on design specifications, covering airline booking, payment management, and tour operations.",
+        "Worked with Azure cloud services and related infrastructure (CI/CD, hosting, storage, monitoring) to support deployment, release management, and system reliability.",
+        "Established engineering workflows with Husky, Commitlint, GitHub Actions, code review, and automated testing to improve development quality.",
+        "Configured Storybook for UI documentation and wrote technical documentation to support team collaboration and onboarding.",
+        "Improved application performance, SEO, and overall user experience through continuous optimization, refactoring, and code maintenance."
+      ],
+      "techStacks": [
+        {
+          "title": "Programming languages",
+          "keys": "ReactJS 18, NextJS 14, HTML, SCSS, Javascript, Typescript."
+        },
+        {
+          "title": "UI libraries",
+          "keys": "Ant Design, MUI React, Syncfusion."
+        },
+        {
+          "title": "Other",
+          "keys": "Firebase, Redux, Redux Toolkit, TanStack Query, Storybook V7, Styled-components, Socket.io, Service Workers, Docker, Nginx, GitHub Actions, Jest."
+        }
+      ]
+    },
+    {
+      "id": "sanbul",
+      "companies": ["Sanbul Solutions"],
+      "positions": ["Frontend Developer"],
+      "startDate": "06/03/2023",
+      "endDate": "05/2024",
+      "responsibilities": [
+        "Create and assign tasks using Jira.",
+        "Develop the source code structure following Atomic Design principles.",
+        "Establish a process for code pushing and committing using Husky, Commitlint, and GitHub Actions.",
+        "Implement the website interface based on design specifications, from management pages to user pages, utilizing Turbo (Vercel) for monorepos.",
+        "Configure Socket connections with the Backend and develop Service Workers.",
+        "Configure Storybook for documenting components and write comprehensive README files.",
+        "Create Dockerfile and Nginx configurations, and deploy the website.",
+        "Code maintenance (review, clean, and refactor).",
+        "Integrate OAuth for login with Google, Facebook, Naver, and KakaoTalk."
+      ],
+      "techStacks": [
+        {
+          "title": "Programming languages",
+          "keys": "ReactJS 18, NextJS 13, HTML, SCSS, Javascript, Typescript."
+        },
+        {
+          "title": "UI libraries",
+          "keys": "Ant Design, MUI React."
+        },
+        {
+          "title": "Other",
+          "keys": "Vite, Redux, Redux Toolkit, TanStack Query, Storybook V7, Styled-components, Socket.io, Service Workers, Docker, Nginx, GitHub Actions, Jest."
+        }
+      ]
+    },
+    {
+      "id": "nova",
+      "companies": ["Nova E-Force (3Forcom)"],
+      "positions": ["Frontend Developer"],
+      "startDate": "2022",
+      "endDate": "28/02/2023",
+      "responsibilities": [
+        "Create and assign tasks using Jira.",
+        "Develop the source code structure following Atomic Design principles.",
+        "Establish a process for code pushing and committing using Husky, Commitlint, and GitHub Actions.",
+        "Implement the website interface based on design specifications using Turbo monorepos.",
+        "Configure Socket connections with the Backend and develop Service Workers.",
+        "Configure Storybook for documenting components and write README files.",
+        "Create Dockerfile and Nginx configurations, and deploy the website.",
+        "Maintain legacy company projects.",
+        "Implement motion effects and animations.",
+        "Trigger Google Analytics events.",
+        "Deploy with PM2 or Docker.",
+        "Communicate with Backend developers for API integration.",
+        "Analyze and suggest solutions for stakeholder problems."
+      ],
+      "techStacks": [
+        {
+          "title": "Programming languages",
+          "keys": "React TS, NextJS 10/12, HTML, SCSS, Javascript, Typescript."
+        },
+        {
+          "title": "UI libraries",
+          "keys": "Ant Design, ChartJS, Bootstrap 5, Animate.css, Owl Carousel, GSAP, React MUI, AOS, tsParticles."
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "nova-phan-thiet",
+      "title": "Nova Phan Thiet",
+      "url": "https://novaworldphanthiet.com.vn/",
+      "description": "Participate in building components from small to large according to the design in Figma and integrate APIs from the back-end team. Collaborate with stakeholders to fulfill customer requirements, fix bugs, and make improvements to ensure the project stays on schedule. The goal is to introduce Nova Group's real estate projects in Phan Thiết. Use ReactTS, Bootstrap, Redux, React Query, axios, i18next, etc."
+    },
+    {
+      "id": "nova-aqua-city",
+      "title": "Nova Aqua City",
+      "url": "https://aquacity.com.vn/",
+      "description": "Participate in building small to large components according to designs in Figma and integrating APIs from the back-end team. Collaborate with stakeholders to meet customer requirements, fix bugs, and make improvements to keep projects on schedule. The goal is to introduce Nova Group's real estate projects, Aqua City project in the eastern area of Ho Chi Minh City. Use ReactTS, Bootstrap, Redux, React Query, axios, i18next, etc."
+    },
+    {
+      "id": "daikin",
+      "title": "DAIKIN",
+      "url": "https://www.daikin.com.vn/",
+      "description": "Maintain the projects according to the client's plan for the two websites, Daikin and Daikineshop. Upgrade and rebuild them using the existing technology to the latest version and develop new features."
+    },
+    {
+      "id": "gumac",
+      "title": "Gumac",
+      "url": "https://gumac.vn/",
+      "description": "Develop features and integrate APIs according to requirements from start to finish of the project. Fix bugs as they arise and support team members in their work. Collaborate with design, QA, BA, and backend teams to ensure progress according to schedule. Use ReactTS, Bootstrap, Redux, React Query, axios, i18next, etc."
+    }
+  ],
+  "contacts": [
+    {
+      "id": "email",
+      "label": "Email",
+      "value": "vanlocforwork.nv@gmail.com",
+      "href": "mailto:vanlocforwork.nv@gmail.com",
+      "icon": "mail"
+    },
+    {
+      "id": "phone",
+      "label": "Phone",
+      "value": "(+84) 829 574 920",
+      "href": "tel:+84829574920",
+      "icon": "phone"
+    }
+  ],
+  "assets": {
+    "lottie": {
+      "build": "/lottie/build.json",
+      "coding": "/lottie/coding.json",
+      "contact": "/lottie/contact.json"
+    }
+  },
+  "three": {
+    "enabled": true,
+    "pointCount": 2500,
+    "radius": 1.5,
+    "pointSize": 0.012,
+    "camera": {
+      "position": [0, 0, 1],
+      "fov": 70
+    },
+    "gradient": "linear-gradient(to right, #fc5c7d, #6a82fb)"
+  }
+}

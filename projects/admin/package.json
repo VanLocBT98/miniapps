@@ -1,0 +1,46 @@
+{
+  "name": "@repo/admin",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "miniapp": true,
+  "exports": {
+    ".": "./src/project.ts",
+    "./project": "./src/project.ts",
+    "./apis": "./src/shared/services/apis/apis.ts",
+    "./query-keys": "./src/shared/services/apis/query-keys.ts"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.app.json --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@repo/shared": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "@tanstack/react-query": "^5.101.4",
+    "@tanstack/react-router": "^1.170.20",
+    "@tanstack/react-table": "^9.0.0",
+    "lucide-react": "^1.28.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "zod": "^4.3.3",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.5",
+    "eslint": "^10.8.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.0",
+    "vitest": "^4.1.10"
+  }
+}

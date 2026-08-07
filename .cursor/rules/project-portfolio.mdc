@@ -1,0 +1,18 @@
+---
+description: Portfolio mini-app — follow docs/projects/portfolio requirements
+globs: projects/portfolio/**/*,apps/main/src/routes/portfolio*.tsx,docs/projects/portfolio/**/*,docs/ai/PORTFOLIO.md
+alwaysApply: false
+---
+
+# Portfolio (`@repo/portfolio`)
+
+Before editing: read `docs/projects/portfolio/REQUIREMENTS.md`.
+Short facts: `docs/ai/PORTFOLIO.md`.
+After meaningful changes: append `docs/projects/portfolio/CHANGELOG.md`.
+
+Key constraints:
+
+- Content → `projects/portfolio/src/shared/data/portfolio.json` only
+- White text + weight hierarchy; primary `#a5b4fc` accents only
+- Public `/portfolio`; header back link to `/`
+- Host must keep Tailwind `@source` for `projects/` so styles apply on `:3000`

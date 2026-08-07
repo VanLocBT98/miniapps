@@ -1,0 +1,45 @@
+{
+  "name": "@repo/shared",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./project": "./src/project/index.ts",
+    "./auth": "./src/auth/index.ts",
+    "./api": "./src/api/index.ts",
+    "./query": "./src/query/index.ts",
+    "./hooks": "./src/hooks/index.ts",
+    "./utils": "./src/utils/index.ts",
+    "./constants": "./src/constants/index.ts",
+    "./types": "./src/types/index.ts",
+    "./runtime": "./src/runtime/index.ts",
+    "./registry": "./src/registry/index.ts",
+    "./seo": "./src/seo/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "echo \"lint skipped (use root eslint later)\"",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@repo/config": "workspace:*",
+    "zod": "^4.3.3",
+    "zustand": "^5.0.14"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@tanstack/react-query": "^5.101.4",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
+  }
+}

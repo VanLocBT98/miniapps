@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "hooks": {
+    "stop": [
+      {
+        "command": "node .cursor/hooks/req-stop-continue.mjs",
+        "loop_limit": 25
+      }
+    ]
+  }
+}

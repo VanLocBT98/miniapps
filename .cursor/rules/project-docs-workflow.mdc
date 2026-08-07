@@ -1,0 +1,14 @@
+---
+description: Per-project REQUIREMENTS stay future-facing; CHANGELOG holds history
+alwaysApply: true
+---
+
+# Project docs workflow
+
+When coding `projects/<id>/` or its host routes:
+
+1. Read `docs/projects/<id>/REQUIREMENTS.md` first (living **future/current** spec — keep it short).
+2. If a linked `features/<slug>.md` exists for the task, read that too.
+3. Do not grow REQUIREMENTS with history. After shipping: prune “Current focus”, append `CHANGELOG.md`, archive/delete feature files.
+4. If REQUIREMENTS would exceed ~150–200 lines, split the in-flight work into `features/<slug>.md` instead.
+5. Detail: `docs/projects/README.md`. `AGENTS.md` still wins on platform architecture.

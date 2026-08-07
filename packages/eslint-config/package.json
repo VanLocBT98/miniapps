@@ -1,0 +1,21 @@
+{
+  "name": "@repo/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./base": "./base.js",
+    "./react": "./react.js"
+  },
+  "dependencies": {
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.3.0",
+    "typescript-eslint": "^8.66.0"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0",
+    "typescript": "^5.0.0"
+  }
+}

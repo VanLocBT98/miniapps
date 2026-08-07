@@ -1,0 +1,18 @@
+---
+description: Import docs → run ACTIONS per docs/projects/PROCESS.md
+alwaysApply: true
+---
+
+# Requirements process
+
+Canonical process: `docs/projects/PROCESS.md`.
+
+When user **imports / @-mentions** `docs/projects/<id>/**` or says `chạy requirements <id>`:
+
+1. Follow PROCESS.md (do not re-ask for the workflow).
+2. `pnpm req:start <id>` if no active run (or continue from `pnpm req:next`).
+3. Implement **one** ACTION from `requirements/ACTIONS.md` only.
+4. `pnpm req:done <id> <actionId>` + CHANGELOG + tick `11-todo.md` if present.
+5. Stop so the stop-hook can continue (unless user said dừng / stop).
+
+`dừng requirements` / `pnpm req:stop` ends the run.

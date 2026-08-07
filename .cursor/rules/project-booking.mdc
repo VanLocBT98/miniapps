@@ -1,0 +1,14 @@
+---
+description: Booking mini-app — follow docs/projects/booking requirements pack
+globs: projects/booking/**/*,apps/main/src/routes/_app/booking*.tsx,docs/projects/booking/**/*
+alwaysApply: false
+---
+
+# Booking (`@repo/booking`)
+
+1. Read living index: `docs/projects/booking/REQUIREMENTS.md`
+2. For the task, open the matching file under `docs/projects/booking/requirements/` (e.g. routing → `03-routing.md`, API → `05-api.md`).
+3. Progress / order: `requirements/11-todo.md`
+4. After meaningful work: append `docs/projects/booking/CHANGELOG.md` and check off `11-todo.md` items.
+
+Do not treat the current calendar mock as final product scope.

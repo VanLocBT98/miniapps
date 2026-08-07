@@ -1,0 +1,10 @@
+---
+description: Admin mini-app — follow docs/projects/admin requirements
+globs: projects/admin/**/*,apps/main/src/routes/_app/admin*.tsx,docs/projects/admin/**/*
+alwaysApply: false
+---
+
+# Admin (`@repo/admin`)
+
+Read `docs/projects/admin/REQUIREMENTS.md` before changes.
+Append `docs/projects/admin/CHANGELOG.md` after meaningful work.
