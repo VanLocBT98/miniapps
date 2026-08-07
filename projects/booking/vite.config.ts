@@ -25,7 +25,7 @@ function stubServerFns(): Plugin {
 export default defineConfig({
   plugins: [stubServerFns(), tailwindcss(), react()],
   build: {
-    sourcemap: true,
+    sourcemap: false,
   },
   resolve: {
     alias: {

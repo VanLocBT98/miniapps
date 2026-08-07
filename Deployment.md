@@ -72,9 +72,28 @@ pnpm turbo run build --filter=@repo/dashboard
 
 1. Create four Vercel projects linked to this repo.
 2. Set **Root Directory** to `apps/main`, `projects/dashboard`, `projects/admin`, `projects/booking`.
-3. Copy each project’s ID into GitHub Secrets.
-4. Set `VERCEL_TOKEN` and `VERCEL_ORG_ID` on the repository.
-5. Configure production / preview env vars in Vercel (see [Environment.md](./Environment.md)).
+3. **Main (TanStack Start SSR)** — Framework Preset must be **TanStack Start** (not Vite).
+   - Nitro (`nitro/vite` in `apps/main`) emits the Vercel Build Output API.
+   - Do **not** set Output Directory to `dist/client` (that causes 404 + missing CSS).
+   - `apps/main/vercel.json` already sets `"framework": "tanstack-start"`.
+4. **Mini-apps (Vite SPA)** — Framework **Vite**, Output Directory `dist` (relative to the project root).
+5. Copy each project’s ID into GitHub Secrets (if using Actions deploy).
+6. Set `VERCEL_TOKEN` and `VERCEL_ORG_ID` on the repository.
+7. Configure production / preview env vars in Vercel (see [Environment.md](./Environment.md)).
+
+### After fixing Main settings in the dashboard
+
+Project Settings → Build & Deployment:
+
+| Setting          | Main                            | Dashboard / Admin / Booking |
+| ---------------- | ------------------------------- | --------------------------- |
+| Framework        | TanStack Start                  | Vite                        |
+| Root Directory   | `apps/main`                     | `projects/<name>`           |
+| Install          | from `vercel.json`              | from `vercel.json`          |
+| Build            | from `vercel.json`              | from `vercel.json`          |
+| Output Directory | _(leave empty / Nitro default)_ | `dist`                      |
+
+Then **Redeploy** the latest production deployment.
 
 ## Rollback
 
@@ -107,11 +126,13 @@ Multi-stage `Dockerfile` targets: `development`, `build`, `production` (health c
 
 | Symptom                                   | Fix                                                             |
 | ----------------------------------------- | --------------------------------------------------------------- |
+| Main URL returns `NOT_FOUND` / no CSS     | Framework must be TanStack Start; remove `dist/client` output   |
 | Preview job fails “Missing GitHub secret” | Add `VERCEL_PROJECT_*` secrets                                  |
 | Build works locally, fails on Vercel      | Align Node 22 / pnpm 11.20; check Root Directory                |
 | API calls hit wrong host                  | Set `VITE_API_URL` in Vercel env (see Environment.md)           |
 | CI builds all apps                        | Shared package or lockfile changed — expected                   |
 | Playwright flaky                          | Check `webServer` timeout; smoke suite only in CI               |
+| Console spam `.js.map` 403                | Prod SPA builds use `sourcemap: false`                          |
 | `vercel promote` warns                    | Deployment may already be production; verify alias in dashboard |
 
 ## End-to-end automation

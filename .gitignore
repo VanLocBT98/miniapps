@@ -24,4 +24,8 @@ apps/main/src/routeTree.gen.ts
 .pnpm-store/
 .vercel
 **/.vercel
+.nitro
+**/.nitro
+.output
+**/.output
 audit-report.txt

@@ -6,7 +6,7 @@ import path from 'node:path'
 export default defineConfig({
   plugins: [tailwindcss(), react()],
   build: {
-    sourcemap: true,
+    sourcemap: false,
   },
   resolve: {
     alias: {

@@ -3,6 +3,7 @@ import { defineConfig, type Plugin } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { nitro } from 'nitro/vite'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -37,7 +38,11 @@ export default defineConfig({
     port: 3000,
   },
   build: {
-    sourcemap: true,
+    // Hidden source maps for observability; avoids Vercel 403 spam on .map in DevTools.
+    sourcemap: 'hidden',
+    rolldownOptions: {
+      external: ['postgres'],
+    },
   },
   test: {
     exclude: ['**/e2e/**', '**/node_modules/**', '**/dist/**'],
@@ -57,5 +62,18 @@ export default defineConfig({
     external: ['postgres'],
     noExternal: ['@repo/db', 'drizzle-orm'],
   },
-  plugins: [workspaceAtAlias(), tailwindcss(), tanstackStart(), viteReact()],
+  // Nitro emits Vercel Build Output API (SSR + assets). Required for production deploy.
+  plugins: [
+    workspaceAtAlias(),
+    tailwindcss(),
+    tanstackStart(),
+    nitro({
+      // On Vercel, Nitro auto-selects the vercel preset (Build Output API).
+      // Keep native DB driver external for the server bundle.
+      rollupConfig: {
+        external: ['postgres'],
+      },
+    }),
+    viteReact(),
+  ],
 })
