@@ -40,12 +40,12 @@ await api.get('/health')
 
 ## Server variables (Main / SSR)
 
-| Variable              | Description                         |
-| --------------------- | ----------------------------------- |
-| `DATABASE_URL`        | Postgres (booking customers)        |
-| `SESSION_SECRET`      | Session signing (≥16 chars)         |
-| `APP_URL` / `API_URL` | Server-side companions to Vite vars |
-| `AUTH_COOKIE_NAME`    | Session cookie name                 |
+| Variable              | Description                                                                                                                                                                                 |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`        | Postgres (booking customers). Required on Vercel Production/Preview or `/customer` falls back to in-memory mock (data lost on reload). Use a hosted URL (Neon/Supabase), never `localhost`. |
+| `SESSION_SECRET`      | Session signing (≥16 chars)                                                                                                                                                                 |
+| `APP_URL` / `API_URL` | Server-side companions to Vite vars                                                                                                                                                         |
+| `AUTH_COOKIE_NAME`    | Session cookie name                                                                                                                                                                         |
 
 ## GitHub Secrets
 

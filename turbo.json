@@ -1,6 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalPassThroughEnv": [
+    "DATABASE_URL",
+    "SESSION_SECRET",
+    "AUTH_COOKIE_NAME",
+    "APP_URL",
+    "API_URL"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

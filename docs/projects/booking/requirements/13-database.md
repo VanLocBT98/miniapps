@@ -34,3 +34,22 @@ Open `/customer` — data from Postgres when `DATABASE_URL` is set. Without it, 
 Connection default: `postgresql://miniapps:miniapps@localhost:5433/miniapps` (host `5433` → container `5432`, tránh conflict với Postgres local).
 
 `pnpm db:up` starts or reuses container `miniapps-postgres`. If `docker compose` is missing from PATH, it falls back to `docker run`.
+
+## Production (Vercel)
+
+Main on Vercel needs a **hosted** Postgres URL in project env (not localhost):
+
+1. Create Neon / Supabase / Vercel Postgres.
+2. Vercel → `miniapps-main-elpl` → Settings → Environment Variables → `DATABASE_URL` (Production + Preview).
+3. Apply schema + seed against that URL:
+
+```bash
+DATABASE_URL='postgresql://…' pnpm db:push
+DATABASE_URL='postgresql://…' pnpm db:seed
+```
+
+4. Redeploy Main so serverless picks up the env.
+
+`@repo/db` uses a small pool + `prepare: false` for Neon/pooler URLs so CRUD works on Vercel serverless.
+
+Without `DATABASE_URL` on Vercel, create appears to work then disappears after reload (in-memory mock).

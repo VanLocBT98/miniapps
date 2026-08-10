@@ -2,6 +2,14 @@
 
 > Newest first.
 
+## 2026-08-10 — Vercel customer persistence (Neon)
+
+- **Why**: Production `/customer` create disappeared after reload (no `DATABASE_URL` → mock RAM).
+- **What**: Neon Postgres provisioned + schema/seed; `DATABASE_URL` set on Vercel Main (Production/Preview); `@repo/db` client tuned for pooler/serverless (`max: 1`, `prepare: false`); docs for production DB.
+- **Files**: `packages/db/src/client.ts`, `13-database.md`, `Environment.md`
+- **Follow-ups**: Claim Neon DB before 72h expire: https://neon.new/claim/019fe983-010b-761f-bb7b-2ae6553a9752
+- **Requirements**: `13-database.md` Production section.
+
 ## 2026-08-06 — Customer delete = soft-delete
 
 - **Why**: Delete must keep the row in Postgres and hide it from list (not hard `DELETE`).
