@@ -1,6 +1,7 @@
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { loginInputSchema } from '@repo/shared/auth'
+import { useIsClient } from '@repo/shared/hooks'
 import { Button, Card, Input, toast } from '@repo/ui'
 import { loginFn } from '~/lib/auth'
 
@@ -20,11 +21,7 @@ function LoginPage() {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
   const [pending, setPending] = useState(false)
   // Marks client handlers as attached (dev hydration can race native form submit).
-  const [hydrated, setHydrated] = useState(false)
-
-  useEffect(() => {
-    setHydrated(true)
-  }, [])
+  const hydrated = useIsClient()
 
   function submitLogin() {
     const parsed = loginInputSchema.safeParse({ email, password })
