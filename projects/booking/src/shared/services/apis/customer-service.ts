@@ -1,8 +1,5 @@
 import { z } from 'zod'
-import {
-  assertUniqueCustomerCodes,
-  validateCustomer,
-} from '@/shared/domain'
+import { assertUniqueCustomerCodes, validateCustomer } from '@/shared/domain'
 import {
   customerSchema,
   failEnvelope,
@@ -114,7 +111,19 @@ async function withPostgresOrMock<T>(
     const res = await viaServer()
     if (res.error?.code === 'db.unavailable') return viaMock()
     return res
-  } catch {
+  } catch (error) {
+    // Production with DATABASE_URL must not silently write to in-memory mock.
+    if (import.meta.env.PROD) {
+      console.error(
+        '[customer] server fn failed; not falling back to mock',
+        error,
+      )
+      return failEnvelope({
+        code: 'customer.server_error',
+        message:
+          error instanceof Error ? error.message : 'Customer API unavailable',
+      })
+    }
     return viaMock()
   }
 }
@@ -337,19 +346,25 @@ async function deleteCustomerMock(
 export async function listCustomers(
   filters: CustomerListFilters = {},
 ): Promise<ApiEnvelope<Customer[]>> {
-  return withPostgresOrMock(async () => {
-    const { listCustomersFn } = await import('@/server/customer-fns')
-    return (await listCustomersFn({ data: filters })) as ApiEnvelope<Customer[]>
-  }, () => listCustomersMock(filters))
+  return withPostgresOrMock(
+    async () => {
+      const { listCustomersFn } = await import('@/server/customer-fns')
+      return (await listCustomersFn({ data: filters })) as ApiEnvelope<
+        Customer[]
+      >
+    },
+    () => listCustomersMock(filters),
+  )
 }
 
-export async function getCustomer(
-  id: string,
-): Promise<ApiEnvelope<Customer>> {
-  return withPostgresOrMock(async () => {
-    const { getCustomerFn } = await import('@/server/customer-fns')
-    return (await getCustomerFn({ data: { id } })) as ApiEnvelope<Customer>
-  }, () => getCustomerMock(id))
+export async function getCustomer(id: string): Promise<ApiEnvelope<Customer>> {
+  return withPostgresOrMock(
+    async () => {
+      const { getCustomerFn } = await import('@/server/customer-fns')
+      return (await getCustomerFn({ data: { id } })) as ApiEnvelope<Customer>
+    },
+    () => getCustomerMock(id),
+  )
 }
 
 export async function createCustomer(
@@ -375,33 +390,42 @@ export async function createCustomer(
     })
   }
 
-  return withPostgresOrMock(async () => {
-    const { createCustomerFn } = await import('@/server/customer-fns')
-    const { department: _dept, ...rest } = parsed.data
-    return (await createCustomerFn({ data: rest })) as ApiEnvelope<Customer>
-  }, () => createCustomerMock(input))
+  return withPostgresOrMock(
+    async () => {
+      const { createCustomerFn } = await import('@/server/customer-fns')
+      const { department: _dept, ...rest } = parsed.data
+      return (await createCustomerFn({ data: rest })) as ApiEnvelope<Customer>
+    },
+    () => createCustomerMock(input),
+  )
 }
 
 export async function updateCustomer(
   id: string,
   input: UpdateCustomerInput,
 ): Promise<ApiEnvelope<Customer>> {
-  return withPostgresOrMock(async () => {
-    const { updateCustomerFn } = await import('@/server/customer-fns')
-    const { department: _dept, ...rest } = input
-    return (await updateCustomerFn({
-      data: { id, input: rest },
-    })) as ApiEnvelope<Customer>
-  }, () => updateCustomerMock(id, input))
+  return withPostgresOrMock(
+    async () => {
+      const { updateCustomerFn } = await import('@/server/customer-fns')
+      const { department: _dept, ...rest } = input
+      return (await updateCustomerFn({
+        data: { id, input: rest },
+      })) as ApiEnvelope<Customer>
+    },
+    () => updateCustomerMock(id, input),
+  )
 }
 
 export async function deleteCustomer(
   id: string,
 ): Promise<ApiEnvelope<DeleteCustomerResult>> {
-  return withPostgresOrMock(async () => {
-    const { deleteCustomerFn } = await import('@/server/customer-fns')
-    return (await deleteCustomerFn({
-      data: { id },
-    })) as ApiEnvelope<DeleteCustomerResult>
-  }, () => deleteCustomerMock(id))
+  return withPostgresOrMock(
+    async () => {
+      const { deleteCustomerFn } = await import('@/server/customer-fns')
+      return (await deleteCustomerFn({
+        data: { id },
+      })) as ApiEnvelope<DeleteCustomerResult>
+    },
+    () => deleteCustomerMock(id),
+  )
 }

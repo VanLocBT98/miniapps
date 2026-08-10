@@ -44,9 +44,6 @@ export default defineConfig({
   build: {
     // Hidden source maps for observability; avoids Vercel 403 spam on .map in DevTools.
     sourcemap: 'hidden',
-    rolldownOptions: {
-      external: ['postgres'],
-    },
   },
   test: {
     exclude: ['**/e2e/**', '**/node_modules/**', '**/dist/**'],
@@ -63,8 +60,9 @@ export default defineConfig({
     },
   },
   ssr: {
-    external: ['postgres'],
-    noExternal: ['@repo/db', 'drizzle-orm'],
+    // Bundle DB driver into the serverless output — marking `postgres` external
+    // caused ERR_MODULE_NOT_FOUND on Vercel (/var/task) for customer server fns.
+    noExternal: ['@repo/db', 'drizzle-orm', 'postgres'],
   },
   // Nitro emits Vercel Build Output API (SSR + assets). Required for production deploy.
   plugins: [
@@ -73,10 +71,7 @@ export default defineConfig({
     tanstackStart(),
     nitro({
       // On Vercel, Nitro auto-selects the vercel preset (Build Output API).
-      // Keep native DB driver external for the server bundle.
-      rollupConfig: {
-        external: ['postgres'],
-      },
+      // Do not externalize `postgres` — Vercel lambdas do not hoist it reliably.
     }),
     viteReact(),
   ],
