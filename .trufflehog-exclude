@@ -1,9 +1,11 @@
-pnpm-lock.yaml
-**/package-lock.json
-**/*.lock
-**/dist/**
-**/.turbo/**
-**/coverage/**
-**/*.map
-apps/main/.env.development
-apps/main/.env.production
+# TruffleHog --exclude-paths expects RE2 regex (one per line), not shell globs.
+# Comments (#) are fine; empty lines ignored.
+pnpm-lock\.yaml$
+package-lock\.json$
+\.lock$
+(^|/)dist/
+(^|/)\.turbo/
+(^|/)coverage/
+\.map$
+^apps/main/\.env\.development$
+^apps/main/\.env\.production$
