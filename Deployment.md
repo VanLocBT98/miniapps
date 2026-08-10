@@ -81,6 +81,8 @@ pnpm turbo run build --filter=@repo/dashboard
 6. Set `VERCEL_TOKEN` and `VERCEL_ORG_ID` on the repository.
 7. Configure production / preview env vars in Vercel (see [Environment.md](./Environment.md)).
 
+**CI note:** GitHub Actions runs `vercel pull|build|deploy` from the **monorepo root** and relies on each project’s Root Directory. Do not also `cd` into `apps/main` / `projects/*` in the workflow — that doubles the path (`projects/dashboard/projects/dashboard`).
+
 ### After fixing Main settings in the dashboard
 
 Project Settings → Build & Deployment:
